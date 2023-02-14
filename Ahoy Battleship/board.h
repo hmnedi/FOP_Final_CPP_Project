@@ -64,15 +64,11 @@ void save_game(char mat[19][19], int n, string gamename, int playerScore, int en
 
 void set_up_enemy (char enmyMat[19][19], int n){
     for(int i=0; i<n; i++){
-        int x = rand() % n;
-        int y = (rand() % (n - (int(n/2)+1))) + (int(n/2)+1);
-
-        if (enmyMat[x][y] == '*'){
-            while(enmyMat[x][y] == '*'){
-                x = rand() % n;
-                y = (rand() % (n - (int(n/2)+1))) + (int(n/2)+1);
-            }
-        }
+        int x, y;
+        do {
+            x = rand() % n;
+            y = (rand() % (n - (int(n/2)+1))) + (int(n/2)+1);
+        } while(enmyMat[x][y] == '*');
 
         enmyMat[x][y] = '*';
     }
@@ -94,20 +90,16 @@ bool player_shoot(char mat[19][19], int n){
     cin >> x >> y;
     y++;
 
-    if (y <= int(n/2) || x >= n || y >= n){
-        while (y <= int(n/2) || x >= n || y >= n) {
-            cout << "aim inside the enemy's area:\n> ";
-            cin >> x >> y;
-            y++;
-        }
+    while (y <= int(n/2) || x >= n || y >= n) {
+        cout << "aim inside the enemy's area:\n> ";
+        cin >> x >> y;
+        y++;
     }
 
-    if (mat[x][y] == '0' || mat[x][y] == '1'){
-        while (mat[x][y] == '0' || mat[x][y] == '1'){
-            cout << "you can't shoot the same place twice:\n> ";
-            cin  >> x >> y;
-            y++;
-        }
+    while (mat[x][y] == '0' || mat[x][y] == '1'){
+        cout << "you can't shoot the same place twice:\n> ";
+        cin  >> x >> y;
+        y++;
     }
 
     if (mat[x][y] == '*'){
@@ -126,11 +118,10 @@ bool enemy_shoot(char mat[19][19], int n){
     Sleep(2500);
     int x = rand() % n;
     int y = rand() % int(n/2);
-    if (mat[x][y] == '0' || mat[x][y] == '1'){
-        while (mat[x][y] == '0' || mat[x][y] == '1'){
-            x = rand() % n; // random_range = [0, n-1]
-            y = rand() % int(n/2);
-        }
+
+    while (mat[x][y] == '0' || mat[x][y] == '1'){
+        x = rand() % n; // random_range = [0, n-1]
+        y = rand() % int(n/2);
     }
 
     if (mat[x][y] == '*'){
